@@ -1,12 +1,14 @@
 
-$(document).ready(function() {
+$(document).ready(renderStuff);
+
+function renderStuff() {
 
     //Gives the current time
     var now = moment().format("dddd MMM Do YYYY");
     const currentDayDisplay = $("#currentDay");  
     currentDayDisplay.text(now);
     
-    
+    var reminderItems = [];
     //creating a table using jquery
     for (var i = 1; i <=24; i++){
         $(".container").append(
@@ -20,7 +22,6 @@ $(document).ready(function() {
         </div>
         `
         );
-    }
 
 
     //Conditions to check 
@@ -43,38 +44,30 @@ $(document).ready(function() {
         
     }
 
-});
+    
+}
 
 // storing the object
 
-var storageArray = localStorage.storageArray ? JSON.parse(localStorage.storageArray) : [];
-
-
-function saveButton(i){
+function saveButton(id) {
+    var storageArray = [];
     var storageObj = {
-        userReminder: $(`#hour${i}`).val(),
-        storeTime: i
+        userReminder: $(`#hour${id}`).val(),
+        storeTime: id
     };
-
-    
-    storageArray.push(storageObj);
-    localStorage.setItem("storageArray", JSON.stringify(storageArray));
+   //Saved in localStorage
+    localStorage.setItem("storageObj", JSON.stringify(storageObj));
+    var reminderItem = JSON.parse(localStorage.getItem("storageObj"));
+    storageArray.push(reminderItem);
+    console.log("item saved");
 
 }
-
-
-//ddelete this from the array
-// save the item after the page is refreshed
-
-// function deleteButton(i){
-//     var i = 0
-//     for (i =  0 ; i < storageArray.length; i++){
-//         if (storageArray[i] == $(`#hour${i}`).val()){
-//             break;
-//         }
-//     }
-
-//    storageArray.splice(i,0);
-//    console.log(storageArray[i]);
-// }
-
+ 
+function deleteButton(id){
+    var storageObj = {
+        userReminder: $(`#hour${id}`).val(),
+        storeTime: id
+    };
+    console.log("item removed")
+    localStorage.remove('storageObj');
+}
