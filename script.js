@@ -2,8 +2,8 @@
 $(document).ready(function() {
     var storageArray;
  
-    ///local storage =====> when page refrehsed, it works
-    if(localStorage.storageArray){
+    ///local storage =====> when page refreshed, it works
+    if(localStorage.storageArray != null){
 
         // took it out of localstorage
         var thisArray = JSON.parse(localStorage.storageArray);
@@ -49,7 +49,7 @@ $(document).ready(function() {
     //Conditions to check 
     var hourlyTime = [01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
     const currentHour = moment().hours();
-    
+   
     for (var i = 0; i <hourlyTime.length ; i++){
         // passed, present future
         const activeHour = hourlyTime[i];
@@ -70,6 +70,7 @@ $(document).ready(function() {
 
 ////local storage ======> storing it  and putting it in an array
 storageArray = localStorage.storageArray ? JSON.parse(localStorage.storageArray) : [];
+
 function saveButton(i){
     var storageObj = {
         userReminder: $(`#hour${i}`).val(),
@@ -82,33 +83,22 @@ function saveButton(i){
 
 }
 
-// function deleteButton(i){
-//     var i = 0
-//     for (i =  0 ; i < storageArray.length; i++){
-//         if (storageArray[i] == $(`#hour${i}`).val()){
-//             break;
-//         }
-//     }
 
-
-
-if(localStorage.storageArray){
-
-    // took it out of localstorage
-    var thisArray = JSON.parse(localStorage.storageArray);
-    generate();
-    for (var i = 0 ; i < thisArray.length; i++){
-        // console.log(`current store time# ${thisArray[i].storeTime}`);
-        for(var j = 0; j < 25; j++){
-            // console.log(`checking hour ${j}`);
-            if(thisArray[i].storeTime == `hour${j}`)
-            {  
-                $(`#hour${j}`).val(thisArray[i].userReminder); 
+function deleteButton(i){
+    //delete from input area
+    $(`#hour${i}`).val('');
+    storageArray = JSON.parse(localStorage.storageArray);
+    //console.log(deleteEl);
+    for (var i = 0 ; i < storageArray.length; i++){
+        for (var j = 0 ; j < 25; j++){
+            if(storageArray[i].storeTime == `hour${j}`){
+                storageArray.splice(i,1); 
+                console.log(` updated storageArray:`, storageArray);
+               localStorage.setItem("storageArray",JSON.stringify(storageArray));
+                return;
             }
-        }   
-    }
-    
-//    storageArray.splice(i,0);
-//    console.log(storageArray[i]);
-// }
+            
+        }
+    }  
+}
 
